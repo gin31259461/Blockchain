@@ -85,6 +85,9 @@ devDependencies:
   ts-node:
     specifier: ^10.9.2
     version: 10.9.2(@types/node@20.11.20)(typescript@5.3.3)
+  tsconfig-paths:
+    specifier: ^4.2.0
+    version: 4.2.0
   typescript:
     specifier: ^5
     version: 5.3.3
@@ -1531,6 +1534,7 @@ packages:
   /@truffle/db@2.0.36:
     resolution: {integrity: sha512-PpUjOXZgf9Gy8RlP8bJhl5pjJRkghZUcCiGOsS0YbCCI//PGDDoKmS+3QUjXWhiMwTeld3gfUV2ip4p2hMbyVA==}
     engines: {node: ^16.20 || ^18.16 || >=20}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     requiresBuild: true
     dependencies:
       '@graphql-tools/delegate': 8.8.1(graphql@15.8.0)
@@ -2853,6 +2857,7 @@ packages:
 
   /brorand@1.1.0:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
+    requiresBuild: true
     dev: false
 
   /browser-stdout@1.3.1:
@@ -4614,6 +4619,7 @@ packages:
   /follow-redirects@1.15.5(debug@4.3.4):
     resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
     engines: {node: '>=4.0'}
+    requiresBuild: true
     peerDependencies:
       debug: '*'
     peerDependenciesMeta:
@@ -5075,6 +5081,7 @@ packages:
 
   /hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
+    requiresBuild: true
     dependencies:
       hash.js: 1.1.7
       minimalistic-assert: 1.0.1
@@ -6067,10 +6074,12 @@ packages:
 
   /minimalistic-assert@1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
+    requiresBuild: true
     dev: false
 
   /minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
+    requiresBuild: true
     dev: false
 
   /minimatch@3.1.2:
@@ -8196,6 +8205,15 @@ packages:
     dependencies:
       '@types/json5': 0.0.29
       json5: 1.0.2
+      minimist: 1.2.8
+      strip-bom: 3.0.0
+    dev: true
+
+  /tsconfig-paths@4.2.0:
+    resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
+    engines: {node: '>=6'}
+    dependencies:
+      json5: 2.2.3
       minimist: 1.2.8
       strip-bom: 3.0.0
     dev: true
