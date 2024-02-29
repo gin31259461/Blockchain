@@ -42,8 +42,15 @@
     "node_modules"
   ],
   "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true,
+    "esm": true,
     "require": [
       "tsconfig-paths/register"
-    ]
+    ],
+    // "compilerOptions": {
+    //   "module": "NodeNext",
+    //   "moduleResolution": "NodeNext"
+    // }
   }
 }
