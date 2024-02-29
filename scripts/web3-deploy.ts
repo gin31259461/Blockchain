@@ -1,30 +1,37 @@
-import ganache from 'ganache';
-import { ContractOptions, Web3 } from 'web3';
+import Web3, { ContractOptions } from 'web3';
 import compileContract from './compile.cjs';
+
+type Web3Provider = ConstructorParameters<typeof Web3>;
 
 const contractPath = './contracts';
 
-export const deploy = async (contractName: string): Promise<ContractOptions> => {
+export const deploy = async (
+  contractFileName: string,
+  provider: Web3Provider[0],
+  from?: string,
+  gas?: number,
+  interact?: () => Promise<void>
+): Promise<ContractOptions> => {
   /*
    * connect to ethereum node
    */
 
-  const web3 = new Web3(ganache.provider());
-  console.log(`Deploying ${contractName}.sol ...\n`);
+  const web3 = new Web3(provider);
+  console.log(`Deploying ${contractFileName}.sol ...\n`);
 
   /*
    * Compile Contract and Fetch ABI
    */
 
-  const compiledContract = compileContract(`${contractPath}/${contractName}.sol`);
+  const compiledContract = compileContract(`${contractPath}/${contractFileName}.sol`);
 
   const contractNames = Object.keys(compiledContract.contracts.default);
-  const targetContractName = contractNames[0];
+  const defaultContractName = contractNames[0];
 
-  console.log(`Using contract '${targetContractName}' to deploy`);
+  console.log(`Using contract '${defaultContractName}' to deploy`);
 
-  const bytecode = compiledContract.contracts.default[targetContractName].evm.bytecode.object;
-  const abi = compiledContract.contracts.default[targetContractName].abi;
+  const bytecode = compiledContract.contracts.default[defaultContractName].evm.bytecode.object;
+  const abi = compiledContract.contracts.default[defaultContractName].abi;
 
   /*
    * deploy contract
@@ -42,17 +49,21 @@ export const deploy = async (contractName: string): Promise<ContractOptions> => 
       arguments: [],
     })
     .send({
-      from: accounts[0],
-      gas: gasEstimate.toString(),
+      from: from || accounts[0],
+      gas: gas?.toString() || gasEstimate.toString(),
       // gasPrice: web3.utils.toWei('0.00003', 'ether'),
     });
 
   console.log('Finish deploying the contract at the address: ' + result.options.address + '\n');
 
   const deployedContract = new web3.eth.Contract(abi, result.options.address);
-  const message = await deployedContract.methods.getMessage().call();
 
-  console.log("This is the smart contract's message:\n\n" + message + '\n');
+  if ('getMessage' in deployedContract.methods) {
+    const message = await deployedContract.methods.getMessage().call();
+    console.log("This is the smart contract's message:\n\n" + message + '\n');
+  }
+
+  interact && (await interact());
 
   return result.options;
 };

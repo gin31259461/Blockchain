@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .ts,.tsx,.js --fix ./src",
     "format": "prettier --end-of-line lf --write ./src/ ./scripts",
     "ganache": "ganache-cli",
-    "test": "node --import \"data:text/javascript,import { register } from 'node:module'; import { pathToFileURL } from 'node:url'; register('ts-node/esm', pathToFileURL('./'));\" ./scripts/test.ts"
+    "test": "node --import \"data:text/javascript,import { register } from 'node:module'; import { pathToFileURL } from 'node:url'; register('ts-node/esm', pathToFileURL('./'));\" ./scripts/test-hello.ts"
   },
   "dependencies": {
     "ganache": "^7.9.2",
