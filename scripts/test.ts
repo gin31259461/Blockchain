@@ -1,10 +1,9 @@
-import { deploy } from './deploy';
+import { deploy } from './web3-deploy';
 
 (async () => {
   try {
-    const result = await deploy('HelloWorld', []);
-    console.log(`address: ${result.address}`);
+    await deploy('hello');
   } catch (e) {
-    // console.log(e.message);
+    console.log(e);
   }
 })();

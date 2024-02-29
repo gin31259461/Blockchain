@@ -42,15 +42,13 @@
     "node_modules"
   ],
   "ts-node": {
+    // Solve: Error: Cannot find module 'xxx' imported from 'xxx/xxx.ts'
     "experimentalSpecifierResolution": "node",
+    // Skip type check when run the script
     "transpileOnly": true,
     "esm": true,
     "require": [
       "tsconfig-paths/register"
     ],
-    // "compilerOptions": {
-    //   "module": "NodeNext",
-    //   "moduleResolution": "NodeNext"
-    // }
   }
 }
