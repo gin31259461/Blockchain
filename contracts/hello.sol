@@ -6,3 +6,5 @@ contract HelloWorld {
     return "Contract testing";
   }
 }
+
+contract Test {}

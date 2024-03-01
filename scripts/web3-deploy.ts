@@ -1,37 +1,44 @@
-import Web3, { ContractOptions } from 'web3';
+import Web3, { ContractOptions, type Contract } from 'web3';
 import compileContract from './compile.cjs';
+import { type ABI, type SolcCompiledOutput } from './solc-compile-output-types';
 
 type Web3Provider = ConstructorParameters<typeof Web3>;
 
+type InteractFunction = (contract: Contract<ABI[]>) => Promise<void>;
+
+type DeployArgs = {
+  contractFileName: string;
+  provider: Web3Provider[0];
+  targetContractName?: string;
+  from?: string;
+  gas?: number;
+  interact?: InteractFunction;
+};
+
 const contractPath = './contracts';
 
-export const deploy = async (
-  contractFileName: string,
-  provider: Web3Provider[0],
-  from?: string,
-  gas?: number,
-  interact?: () => Promise<void>
-): Promise<ContractOptions> => {
+export const deploy = async (args: DeployArgs): Promise<ContractOptions> => {
   /*
    * connect to ethereum node
    */
 
-  const web3 = new Web3(provider);
-  console.log(`Deploying ${contractFileName}.sol ...\n`);
+  const web3 = new Web3(args.provider);
+  console.log(`Deploying ${args.contractFileName}.sol ...\n`);
 
   /*
    * Compile Contract and Fetch ABI
    */
 
-  const compiledContract = compileContract(`${contractPath}/${contractFileName}.sol`);
+  const compiledContract: SolcCompiledOutput = compileContract(`${contractPath}/${args.contractFileName}.sol`);
 
-  const contractNames = Object.keys(compiledContract.contracts.default);
-  const defaultContractName = contractNames[0];
+  const targetContractName = args.targetContractName || Object.keys(compiledContract.contracts.default)[0];
 
-  console.log(`Using contract '${defaultContractName}' to deploy`);
+  if (!(targetContractName in compiledContract.contracts.default)) throw new Error('Invalid contract name');
 
-  const bytecode = compiledContract.contracts.default[defaultContractName].evm.bytecode.object;
-  const abi = compiledContract.contracts.default[defaultContractName].abi;
+  console.log(`Using contract '${targetContractName}' to deploy`);
+
+  const bytecode = compiledContract.contracts.default[targetContractName].evm.bytecode.object;
+  const abi = compiledContract.contracts.default[targetContractName].abi;
 
   /*
    * deploy contract
@@ -49,8 +56,8 @@ export const deploy = async (
       arguments: [],
     })
     .send({
-      from: from || accounts[0],
-      gas: gas?.toString() || gasEstimate.toString(),
+      from: args.from || accounts[0],
+      gas: args.gas?.toString() || gasEstimate.toString(),
       // gasPrice: web3.utils.toWei('0.00003', 'ether'),
     });
 
@@ -58,12 +65,7 @@ export const deploy = async (
 
   const deployedContract = new web3.eth.Contract(abi, result.options.address);
 
-  if ('getMessage' in deployedContract.methods) {
-    const message = await deployedContract.methods.getMessage().call();
-    console.log("This is the smart contract's message:\n\n" + message + '\n');
-  }
-
-  interact && (await interact());
+  args.interact && (await args.interact(deployedContract));
 
   return result.options;
 };
