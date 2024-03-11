@@ -42,7 +42,7 @@ interface Node {
   name: string;
   nameLocation: string;
   nodeType: string;
-  parameters: Parameters;
+  parameters: NodeParameters;
   returnParameters: ReturnParameters;
   scope: number;
   src: string;
@@ -74,11 +74,11 @@ interface SourceAstNode {
 interface ReturnParameters {
   id: number;
   nodeType: string;
-  parameters: Parameter[];
+  parameters: Parameters[];
   src: string;
 }
 
-interface Parameter {
+interface Parameters {
   constant: boolean;
   id: number;
   mutability: string;
@@ -102,7 +102,7 @@ interface TypeName {
   typeDescriptions: TypeDescriptions;
 }
 
-interface Parameters {
+interface NodeParameters {
   id: number;
   nodeType: string;
   parameters: any[];
